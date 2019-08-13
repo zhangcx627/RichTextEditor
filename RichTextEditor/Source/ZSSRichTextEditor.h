@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "HRColorPickerViewController.h"
 #import "ZSSFontsViewController.h"
-
+#import <WebKit/WebKit.h>
 /**
  *  The types of toolbar items that can be added
  */
@@ -55,7 +55,7 @@ static NSString * const ZSSRichTextEditorToolbarFonts = @"com.zedsaid.toolbarite
 /**
  *  The viewController used with ZSSRichTextEditor
  */
-@interface ZSSRichTextEditor : UIViewController <UIWebViewDelegate, HRColorPickerViewControllerDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate,ZSSFontsViewControllerDelegate>
+@interface ZSSRichTextEditor : UIViewController <WKNavigationDelegate, WKUIDelegate, HRColorPickerViewControllerDelegate, UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate,ZSSFontsViewControllerDelegate>
 
 
 /**

@@ -109,6 +109,7 @@
 		DED0B0F223024D04007680E4 /* HRColorCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = DED0B08C23024D03007680E4 /* HRColorCursor.m */; };
 		DED0B0F323024D04007680E4 /* ZSSTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = DED0B09523024D03007680E4 /* ZSSTextView.m */; };
 		DED0B0F423024D04007680E4 /* jQuery.js in Resources */ = {isa = PBXBuildFile; fileRef = DED0B09623024D03007680E4 /* jQuery.js */; };
+		DED0B0FA23028232007680E4 /* WKWebView+WKWebViewInjection.m in Sources */ = {isa = PBXBuildFile; fileRef = DED0B0F923028232007680E4 /* WKWebView+WKWebViewInjection.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,6 +255,8 @@
 		DED0B09423024D03007680E4 /* CYRTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYRTextStorage.h; sourceTree = "<group>"; };
 		DED0B09523024D03007680E4 /* ZSSTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZSSTextView.m; sourceTree = "<group>"; };
 		DED0B09623024D03007680E4 /* jQuery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jQuery.js; sourceTree = "<group>"; };
+		DED0B0F823028232007680E4 /* WKWebView+WKWebViewInjection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WKWebView+WKWebViewInjection.h"; sourceTree = "<group>"; };
+		DED0B0F923028232007680E4 /* WKWebView+WKWebViewInjection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WKWebView+WKWebViewInjection.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -339,20 +342,22 @@
 		DED0B02723024D03007680E4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				DED0B02823024D03007680E4 /* ZSSRichTextEditor.js */,
 				DED0B02923024D03007680E4 /* ZSSBarButtonItem.h */,
-				DED0B02A23024D03007680E4 /* ZSSRichTextEditor.h */,
-				DED0B02B23024D03007680E4 /* Images */,
-				DED0B07823024D03007680E4 /* ZSSFontsViewController.h */,
-				DED0B07923024D03007680E4 /* editor.html */,
-				DED0B07A23024D03007680E4 /* ZSSTextView.h */,
-				DED0B07B23024D03007680E4 /* ZSSRichTextEditor.m */,
 				DED0B07C23024D03007680E4 /* ZSSBarButtonItem.m */,
-				DED0B07D23024D03007680E4 /* JSBeautifier.js */,
+				DED0B0F823028232007680E4 /* WKWebView+WKWebViewInjection.h */,
+				DED0B0F923028232007680E4 /* WKWebView+WKWebViewInjection.m */,
+				DED0B02A23024D03007680E4 /* ZSSRichTextEditor.h */,
+				DED0B07B23024D03007680E4 /* ZSSRichTextEditor.m */,
+				DED0B07823024D03007680E4 /* ZSSFontsViewController.h */,
 				DED0B07E23024D03007680E4 /* ZSSFontsViewController.m */,
-				DED0B07F23024D03007680E4 /* Third Party */,
+				DED0B07A23024D03007680E4 /* ZSSTextView.h */,
 				DED0B09523024D03007680E4 /* ZSSTextView.m */,
+				DED0B07923024D03007680E4 /* editor.html */,
+				DED0B02823024D03007680E4 /* ZSSRichTextEditor.js */,
+				DED0B07D23024D03007680E4 /* JSBeautifier.js */,
 				DED0B09623024D03007680E4 /* jQuery.js */,
+				DED0B02B23024D03007680E4 /* Images */,
+				DED0B07F23024D03007680E4 /* Third Party */,
 			);
 			name = Source;
 			path = RichTextEditor/Source;
@@ -691,6 +696,7 @@
 				DED0B0ED23024D04007680E4 /* CYRLayoutManager.m in Sources */,
 				DED0B0F123024D04007680E4 /* HRColorUtil.m in Sources */,
 				DED0B0E823024D04007680E4 /* ZSSFontsViewController.m in Sources */,
+				DED0B0FA23028232007680E4 /* WKWebView+WKWebViewInjection.m in Sources */,
 				DED0B0EF23024D04007680E4 /* CYRTextStorage.m in Sources */,
 				DED0B0F023024D04007680E4 /* CYRTextView.m in Sources */,
 				DED0B0EA23024D04007680E4 /* HRColorPickerViewController.m in Sources */,
