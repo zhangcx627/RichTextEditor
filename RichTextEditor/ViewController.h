@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+#import "ZSSRichTextEditor.h"
+
+@interface ViewController : ZSSRichTextEditor
 
 
 @end
