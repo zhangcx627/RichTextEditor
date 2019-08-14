@@ -355,9 +355,12 @@ static CGFloat kDefaultScale = 0.5;
     //scalesPageToFit
     NSString *jScript = @"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);";
     WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:jScript injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+
+    
     WKUserContentController *wkUController = [[WKUserContentController alloc] init];
     [wkUController addUserScript:wkUScript];
     WKWebViewConfiguration * config = [[WKWebViewConfiguration alloc] init];
+    config.preferences.javaScriptEnabled = YES;
     config.dataDetectorTypes = UIDataDetectorTypeNone;
     config.userContentController = wkUController;
 
@@ -1689,7 +1692,39 @@ static CGFloat kDefaultScale = 0.5;
 
 #pragma mark - UIWebView Delegate
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
+    NSString *urlString = [navigationAction.request.URL.absoluteString stringByRemovingPercentEncoding];
+    if ([urlString rangeOfString:@"callback://0/"].location != NSNotFound) {
+
+        // We recieved the callback
+        NSString *className = [urlString stringByReplacingOccurrencesOfString:@"callback://0/" withString:@""];
+        [self updateToolBarWithButtonName:className];
+        decisionHandler(WKNavigationActionPolicyCancel);
+
+    } else if ([urlString rangeOfString:@"debug://"].location != NSNotFound) {
+
+        NSLog(@"Debug Found");
+
+        // We recieved the callback
+        NSString *debug = [urlString stringByReplacingOccurrencesOfString:@"debug://" withString:@""];
+        debug = [debug stringByRemovingPercentEncoding];
+        NSLog(@"%@", debug);
+        decisionHandler(WKNavigationActionPolicyCancel);
+
+    } else if ([urlString rangeOfString:@"scroll://"].location != NSNotFound) {
+
+        NSInteger position = [[urlString stringByReplacingOccurrencesOfString:@"scroll://" withString:@""] integerValue];
+        [self editorDidScrollWithPosition:position];
+        decisionHandler(WKNavigationActionPolicyCancel);
+
+    } else {
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
+
+
+}
+
+/*- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
     
     NSString *urlString = [[request URL] absoluteString];
@@ -1721,10 +1756,9 @@ static CGFloat kDefaultScale = 0.5;
     
     return YES;
     
-}
+}*/
 
-
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     self.editorLoaded = YES;
     
     if (!self.internalHTML) {
@@ -1753,7 +1787,11 @@ static CGFloat kDefaultScale = 0.5;
      */
     __block bool receiveEditorDidChangeEvents = _receiveEditorDidChangeEvents;
     __weak typeof(self) weakSelf = self;
-    JSContext *ctx = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    /*JSContext *ctx = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
+    ctx[@"ios"] = self;
+    ctx.exceptionHandler = ^(JSContext *context, JSValue *exceptionValue) {
+        context.exception = exceptionValue; NSLog(@"异常信息：%@", exceptionValue);
+    };
     ctx[@"contentUpdateCallback"] = ^(JSValue *msg) {
         
         __weak typeof(weakSelf) StrongSelf = weakSelf;
@@ -1775,7 +1813,7 @@ static CGFloat kDefaultScale = 0.5;
     [ctx evaluateScript:@"document.getElementById('zss_editor_content').addEventListener('input', contentUpdateCallback, false);"];
     
     [ctx evaluateScript:@"document.getElementById('zss_editor_content').addEventListener('paste', contentPasteCallback, false);"];
-    
+*/
 }
 
 #pragma mark - Mention & Hashtag Support Section
@@ -2114,7 +2152,7 @@ static CGFloat kDefaultScale = 0.5;
 
 - (NSString *)stringByDecodingURLFormat:(NSString *)string {
     NSString *result = [string stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-    result = [result stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    result = [result stringByRemovingPercentEncoding];
     return result;
 }
 
