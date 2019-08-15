@@ -397,34 +397,6 @@ zss_editor.updateLink = function(url, title) {
     
 }//end
 
-zss_editor.updateImage = function(url, alt) {
-    
-    zss_editor.restorerange();
-    
-    if (zss_editor.currentEditingImage) {
-        var c = zss_editor.currentEditingImage;
-        c.attr('src', url);
-        c.attr('alt', alt);
-    }
-    zss_editor.enabledEditingItems();
-    
-}//end
-
-zss_editor.updateImageBase64String = function(imageBase64String, alt) {
-    
-    zss_editor.restorerange();
-    
-    if (zss_editor.currentEditingImage) {
-        var c = zss_editor.currentEditingImage;
-        var src = 'data:image/jpeg;base64,' + imageBase64String;
-        c.attr('src', src);
-        c.attr('alt', alt);
-    }
-    zss_editor.enabledEditingItems();
-    
-}//end
-
-
 zss_editor.unlink = function() {
     
     if (zss_editor.currentEditingLink) {
@@ -468,20 +440,6 @@ zss_editor.quickLink = function() {
 
 zss_editor.prepareInsert = function() {
     zss_editor.backuprange();
-}
-
-zss_editor.insertImage = function(url, alt) {
-    zss_editor.restorerange();
-    var html = '<img src="'+url+'" alt="'+alt+'" />';
-    zss_editor.insertHTML(html);
-    zss_editor.enabledEditingItems();
-}
-
-zss_editor.insertImageBase64String = function(imageBase64String, alt) {
-    zss_editor.restorerange();
-    var html = '<img src="data:image/jpeg;base64,'+imageBase64String+'" alt="'+alt+'" />';
-    zss_editor.insertHTML(html);
-    zss_editor.enabledEditingItems();
 }
 
 zss_editor.setHTML = function(html) {

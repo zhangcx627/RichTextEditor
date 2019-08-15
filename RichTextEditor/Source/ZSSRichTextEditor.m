@@ -257,8 +257,8 @@ static CGFloat kDefaultScale = 0.5;
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
     
     //Source View
-    [self createSourceViewWithFrame:frame];
-    
+//    [self createSourceViewWithFrame:frame];
+
     //Editor View
     [self createEditorViewWithFrame:frame];
     
@@ -312,7 +312,7 @@ static CGFloat kDefaultScale = 0.5;
         [self loadResources];
         
     }
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowOrHide:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
 #pragma mark - View Will Appear Section
@@ -321,7 +321,6 @@ static CGFloat kDefaultScale = 0.5;
     [super viewWillAppear:animated];
     
     //Add observers for keyboard showing or hiding notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowOrHide:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
 #pragma mark - View Will Disappear Section
@@ -330,25 +329,26 @@ static CGFloat kDefaultScale = 0.5;
     [super viewWillDisappear:animated];
     
     //Remove observers for keyboard showing or hiding notifications
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
-    
-}
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 
-#pragma mark - Set Up View Section
-
-- (void)createSourceViewWithFrame:(CGRect)frame {
-    
-    self.sourceView = [[ZSSTextView alloc] initWithFrame:frame];
-    self.sourceView.hidden = YES;
-    self.sourceView.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    self.sourceView.autocorrectionType = UITextAutocorrectionTypeNo;
-    self.sourceView.font = [UIFont fontWithName:@"Courier" size:13.0];
-    self.sourceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.sourceView.autoresizesSubviews = YES;
-    self.sourceView.delegate = self;
-    [self.view addSubview:self.sourceView];
-    
 }
+//
+//#pragma mark - Set Up View Section
+//
+//- (void)createSourceViewWithFrame:(CGRect)frame {
+//
+//    self.sourceView = [[ZSSTextView alloc] initWithFrame:frame];
+//    self.sourceView.backgroundColor = [UIColor redColor];
+//    self.sourceView.hidden = YES;
+//    self.sourceView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+//    self.sourceView.autocorrectionType = UITextAutocorrectionTypeNo;
+//    self.sourceView.font = [UIFont fontWithName:@"Courier" size:13.0];
+//    self.sourceView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    self.sourceView.autoresizesSubviews = YES;
+//    self.sourceView.delegate = self;
+//    [self.view addSubview:self.sourceView];
+//
+//}
 
 - (void)createEditorViewWithFrame:(CGRect)frame {
 
@@ -361,7 +361,7 @@ static CGFloat kDefaultScale = 0.5;
     [wkUController addUserScript:wkUScript];
     WKWebViewConfiguration * config = [[WKWebViewConfiguration alloc] init];
     config.preferences.javaScriptEnabled = YES;
-    config.dataDetectorTypes = UIDataDetectorTypeNone;
+    config.dataDetectorTypes = WKDataDetectorTypeNone;
     config.userContentController = wkUController;
 
     self.editorView = [[WKWebView alloc] initWithFrame:frame configuration:config];
@@ -373,7 +373,7 @@ static CGFloat kDefaultScale = 0.5;
 
     //TODO:
 //    [self.editorView allowDisplayingKeyboardWithoutUserAction];
-    [self.editorView keyboardRequiresUserInteraction: YES];
+    [self.editorView keyboardRequiresUserInteraction: NO];
     self.editorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 
     self.editorView.scrollView.bounces = NO;
@@ -462,7 +462,7 @@ static CGFloat kDefaultScale = 0.5;
     self.resourcesLoaded = YES;
     
 }
-
+//FIXME: 到这里了
 #pragma mark - Toolbar Section
 
 - (void)setEnabledToolbarItems:(NSArray *)enabledToolbarItems {
@@ -822,29 +822,7 @@ static CGFloat kDefaultScale = 0.5;
             [items addObject:outdent];
         }
     }
-    
-    // Image
-    if ((_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarInsertImage]) || (_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarAll])) {
-        ZSSBarButtonItem *insertImage = [[ZSSBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ZSSimage.png" inBundle:bundle compatibleWithTraitCollection:nil] style:UIBarButtonItemStylePlain target:self action:@selector(insertImage)];
-        insertImage.label = @"image";
-        if (customOrder) {
-            [items replaceObjectAtIndex:[_enabledToolbarItems indexOfObject:ZSSRichTextEditorToolbarInsertImage] withObject:insertImage];
-        } else {
-            [items addObject:insertImage];
-        }
-    }
-    
-    // Image From Device
-    if ((_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarInsertImageFromDevice]) || (_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarAll])) {
-        ZSSBarButtonItem *insertImageFromDevice = [[ZSSBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ZSSimageDevice.png" inBundle:bundle compatibleWithTraitCollection:nil] style:UIBarButtonItemStylePlain target:self action:@selector(insertImageFromDevice)];
-        insertImageFromDevice.label = @"imageFromDevice";
-        if (customOrder) {
-            [items replaceObjectAtIndex:[_enabledToolbarItems indexOfObject:ZSSRichTextEditorToolbarInsertImageFromDevice] withObject:insertImageFromDevice];
-        } else {
-            [items addObject:insertImageFromDevice];
-        }
-    }
-    
+
     // Insert Link
     if ((_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarInsertLink]) || (_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarAll])) {
         ZSSBarButtonItem *insertLink = [[ZSSBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ZSSlink.png" inBundle:bundle compatibleWithTraitCollection:nil] style:UIBarButtonItemStylePlain target:self action:@selector(insertLink)];
@@ -982,7 +960,7 @@ static CGFloat kDefaultScale = 0.5;
 #pragma mark - Editor Interaction
 
 - (void)focusTextEditor {
-    [self.editorView keyboardRequiresUserInteraction: YES];
+    [self.editorView keyboardRequiresUserInteraction: NO];
     NSString *js = [NSString stringWithFormat:@"zss_editor.focusEditor();"];
     [self.editorView syncEvalJavascriptString:js];
 }
@@ -1100,6 +1078,7 @@ static CGFloat kDefaultScale = 0.5;
     [self.editorView syncEvalJavascriptString:trigger];
 }
 
+//下标
 - (void)setSubscript {
     NSString *trigger = @"zss_editor.setSubscript();";
     [self.editorView syncEvalJavascriptString:trigger];
@@ -1109,7 +1088,7 @@ static CGFloat kDefaultScale = 0.5;
     NSString *trigger = @"zss_editor.setUnderline();";
     [self.editorView syncEvalJavascriptString:trigger];
 }
-
+//上标
 - (void)setSuperscript {
     NSString *trigger = @"zss_editor.setSuperscript();";
     [self.editorView syncEvalJavascriptString:trigger];
@@ -1274,6 +1253,7 @@ static CGFloat kDefaultScale = 0.5;
         trigger = [NSString stringWithFormat:@"zss_editor.setBackgroundColor(\"%@\");", hex];
     }
     [self.editorView syncEvalJavascriptString:trigger];
+    [self.editorView keyboardRequiresUserInteraction: NO];
 
 }
 
@@ -1440,190 +1420,6 @@ static CGFloat kDefaultScale = 0.5;
     if (_receiveEditorDidChangeEvents) {
         [self editorDidChangeWithText:[self getText] andHTML:[self getHTML]];
     }
-}
-
-- (void)insertImage {
-    
-    // Save the selection location
-    [self.editorView syncEvalJavascriptString:@"zss_editor.prepareInsert();"];
-    
-    [self showInsertImageDialogWithLink:self.selectedImageURL alt:self.selectedImageAlt];
-    
-}
-
-- (void)insertImageFromDevice {
-    
-    // Save the selection location
-    [self.editorView syncEvalJavascriptString:@"zss_editor.prepareInsert();"];
-    
-    [self showInsertImageDialogFromDeviceWithScale:self.selectedImageScale alt:self.selectedImageAlt];
-    
-}
-
-- (void)showInsertImageDialogWithLink:(NSString *)url alt:(NSString *)alt {
-    
-    // Insert Button Title
-    NSString *insertButtonTitle = !self.selectedImageURL ? NSLocalizedString(@"Insert", nil) : NSLocalizedString(@"Update", nil);
-    
-    // Picker Button
-    UIButton *am = [UIButton buttonWithType:UIButtonTypeCustom];
-    am.frame = CGRectMake(0, 0, 25, 25);
-    [am setImage:[UIImage imageNamed:@"ZSSpicker.png" inBundle:[NSBundle bundleForClass:[ZSSRichTextEditor class]] compatibleWithTraitCollection:nil] forState:UIControlStateNormal];
-    [am addTarget:self action:@selector(showInsertImageAlternatePicker) forControlEvents:UIControlEventTouchUpInside];
-    
-    if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)]) {
-        
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Insert Image", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.placeholder = NSLocalizedString(@"URL (required)", nil);
-            if (url) {
-                textField.text = url;
-            }
-            textField.rightView = am;
-            textField.rightViewMode = UITextFieldViewModeAlways;
-            textField.clearButtonMode = UITextFieldViewModeAlways;
-        }];
-        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.placeholder = NSLocalizedString(@"Alt", nil);
-            textField.clearButtonMode = UITextFieldViewModeAlways;
-            textField.secureTextEntry = NO;
-            if (alt) {
-                textField.text = alt;
-            }
-        }];
-        [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            [self focusTextEditor];
-        }]];
-        [alertController addAction:[UIAlertAction actionWithTitle:insertButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            
-            UITextField *imageURL = [alertController.textFields objectAtIndex:0];
-            UITextField *alt = [alertController.textFields objectAtIndex:1];
-            if (!self.selectedImageURL) {
-                [self insertImage:imageURL.text alt:alt.text];
-            } else {
-                [self updateImage:imageURL.text alt:alt.text];
-            }
-            [self focusTextEditor];
-        }]];
-        [self presentViewController:alertController animated:YES completion:NULL];
-        
-    } else {
-        
-        self.alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Insert Image", nil) message:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:insertButtonTitle, nil];
-        self.alertView.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
-        self.alertView.tag = 1;
-        UITextField *imageURL = [self.alertView textFieldAtIndex:0];
-        imageURL.placeholder = NSLocalizedString(@"URL (required)", nil);
-        if (url) {
-            imageURL.text = url;
-        }
-        
-        imageURL.rightView = am;
-        imageURL.rightViewMode = UITextFieldViewModeAlways;
-        imageURL.clearButtonMode = UITextFieldViewModeAlways;
-        
-        UITextField *alt1 = [self.alertView textFieldAtIndex:1];
-        alt1.secureTextEntry = NO;
-        alt1.placeholder = NSLocalizedString(@"Alt", nil);
-        alt1.clearButtonMode = UITextFieldViewModeAlways;
-        if (alt) {
-            alt1.text = alt;
-        }
-        
-        [self.alertView show];
-    }
-    
-}
-
-- (void)showInsertImageDialogFromDeviceWithScale:(CGFloat)scale alt:(NSString *)alt {
-    
-    // Insert button title
-    NSString *insertButtonTitle = !self.selectedImageURL ? NSLocalizedString(@"Pick Image", nil) : NSLocalizedString(@"Pick New Image", nil);
-    
-    //If the OS version supports the new UIAlertController go for it. Otherwise use the old UIAlertView
-    if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)]) {
-        
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Insert Image From Device", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
-        
-        //Add alt text field
-        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.placeholder = NSLocalizedString(@"Alt", nil);
-            textField.clearButtonMode = UITextFieldViewModeAlways;
-            textField.secureTextEntry = NO;
-            if (alt) {
-                textField.text = alt;
-            }
-        }];
-        
-        //Add scale text field
-        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.clearButtonMode = UITextFieldViewModeAlways;
-            textField.secureTextEntry = NO;
-            textField.placeholder = NSLocalizedString(@"Image scale, 0.5 by default", nil);
-            textField.keyboardType = UIKeyboardTypeDecimalPad;
-        }];
-        
-        //Cancel action
-        [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-            [self focusTextEditor];
-        }]];
-        
-        //Insert action
-        [alertController addAction:[UIAlertAction actionWithTitle:insertButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UITextField *textFieldAlt = [alertController.textFields objectAtIndex:0];
-            UITextField *textFieldScale = [alertController.textFields objectAtIndex:1];
-            
-            self.selectedImageScale = [textFieldScale.text floatValue]?:kDefaultScale;
-            self.selectedImageAlt = textFieldAlt.text?:@"";
-            
-            [self presentViewController:self.imagePicker animated:YES completion:nil];
-            
-        }]];
-        
-        [self presentViewController:alertController animated:YES completion:NULL];
-        
-    } else {
-        
-        self.alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Insert Image", nil) message:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:insertButtonTitle, nil];
-        self.alertView.alertViewStyle = UIAlertViewStyleLoginAndPasswordInput;
-        self.alertView.tag = 3;
-        
-        UITextField *textFieldAlt = [self.alertView textFieldAtIndex:0];
-        textFieldAlt.secureTextEntry = NO;
-        textFieldAlt.placeholder = NSLocalizedString(@"Alt", nil);
-        textFieldAlt.clearButtonMode = UITextFieldViewModeAlways;
-        if (alt) {
-            textFieldAlt.text = alt;
-        }
-        
-        UITextField *textFieldScale = [self.alertView textFieldAtIndex:1];
-        textFieldScale.placeholder = NSLocalizedString(@"Image scale, 0.5 by default", nil);
-        textFieldScale.keyboardType = UIKeyboardTypeDecimalPad;
-        
-        [self.alertView show];
-    }
-    
-}
-
-- (void)insertImage:(NSString *)url alt:(NSString *)alt {
-    NSString *trigger = [NSString stringWithFormat:@"zss_editor.insertImage(\"%@\", \"%@\");", url, alt];
-    [self.editorView syncEvalJavascriptString:trigger];
-}
-
-
-- (void)updateImage:(NSString *)url alt:(NSString *)alt {
-    NSString *trigger = [NSString stringWithFormat:@"zss_editor.updateImage(\"%@\", \"%@\");", url, alt];
-    [self.editorView syncEvalJavascriptString:trigger];
-}
-
-- (void)insertImageBase64String:(NSString *)imageBase64String alt:(NSString *)alt {
-    NSString *trigger = [NSString stringWithFormat:@"zss_editor.insertImageBase64String(\"%@\", \"%@\");", imageBase64String, alt];
-    [self.editorView syncEvalJavascriptString:trigger];
-}
-
-- (void)updateImageBase64String:(NSString *)imageBase64String alt:(NSString *)alt {
-    NSString *trigger = [NSString stringWithFormat:@"zss_editor.updateImageBase64String(\"%@\", \"%@\");", imageBase64String, alt];
-    [self.editorView syncEvalJavascriptString:trigger];
 }
 
 
@@ -1915,43 +1711,6 @@ static CGFloat kDefaultScale = 0.5;
     return YES;
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (alertView.tag == 1) {
-        if (buttonIndex == 1) {
-            UITextField *imageURL = [alertView textFieldAtIndex:0];
-            UITextField *alt = [alertView textFieldAtIndex:1];
-            if (!self.selectedImageURL) {
-                [self insertImage:imageURL.text alt:alt.text];
-            } else {
-                [self updateImage:imageURL.text alt:alt.text];
-            }
-        }
-    } else if (alertView.tag == 2) {
-        if (buttonIndex == 1) {
-            UITextField *linkURL = [alertView textFieldAtIndex:0];
-            UITextField *title = [alertView textFieldAtIndex:1];
-            if (!self.selectedLinkURL) {
-                [self insertLink:linkURL.text title:title.text];
-            } else {
-                [self updateLink:linkURL.text title:title.text];
-            }
-        }
-    } else if (alertView.tag == 3) {
-        if (buttonIndex == 1) {
-            UITextField *textFieldAlt = [alertView textFieldAtIndex:0];
-            UITextField *textFieldScale = [alertView textFieldAtIndex:1];
-            
-            self.selectedImageScale = [textFieldScale.text floatValue]?:kDefaultScale;
-            self.selectedImageAlt = textFieldAlt.text?:@"";
-            
-            [self presentViewController:self.imagePicker animated:YES completion:nil];
-            
-        }
-    }
-}
-
-
 #pragma mark - Asset Picker
 
 - (void)showInsertURLAlternatePicker {
@@ -1962,44 +1721,6 @@ static CGFloat kDefaultScale = 0.5;
 - (void)showInsertImageAlternatePicker {
     // Blank method. User should implement this in their subclass
 }
-
-#pragma mark - Image Picker Delegate
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-    //Dismiss the Image Picker
-    [picker.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *, id> *)info{
-    
-    UIImage *selectedImage = info[UIImagePickerControllerEditedImage]?:info[UIImagePickerControllerOriginalImage];
-    
-    //Scale the image
-    CGSize targetSize = CGSizeMake(selectedImage.size.width * self.selectedImageScale, selectedImage.size.height * self.selectedImageScale);
-    UIGraphicsBeginImageContext(targetSize);
-    [selectedImage drawInRect:CGRectMake(0,0,targetSize.width,targetSize.height)];
-    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    //Compress the image, as it is going to be encoded rather than linked
-    NSData *scaledImageData = UIImageJPEGRepresentation(scaledImage, kJPEGCompression);
-    
-    //Encode the image data as a base64 string
-    NSString *imageBase64String = [scaledImageData base64EncodedStringWithOptions:0];
-    
-    //Decide if we have to insert or update
-    if (!self.imageBase64String) {
-        [self insertImageBase64String:imageBase64String alt:self.selectedImageAlt];
-    } else {
-        [self updateImageBase64String:imageBase64String alt:self.selectedImageAlt];
-    }
-    
-    self.imageBase64String = imageBase64String;
-    
-    //Dismiss the Image Picker
-    [picker.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
-
 
 #pragma mark - Keyboard status
 
@@ -2039,11 +1760,11 @@ static CGFloat kDefaultScale = 0.5;
             self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
             self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
-            // Source View
-            CGRect sourceFrame = self.sourceView.frame;
-            sourceFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
-            self.sourceView.frame = sourceFrame;
-            
+//            // Source View
+//            CGRect sourceFrame = self.sourceView.frame;
+//            sourceFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
+//            self.sourceView.frame = sourceFrame;
+
             // Provide editor with keyboard height and editor view height
             [self setFooterHeight:(keyboardHeight - 8)];
             [self setContentHeight: self.editorViewFrame.size.height];

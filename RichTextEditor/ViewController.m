@@ -31,9 +31,9 @@
     NSString *html = @"<div class='test'></div><!-- This is an HTML comment -->"
     "<p></p>";
 
-    // Set the base URL if you would like to use relative links, such as to images.
+//    // Set the base URL if you would like to use relative links, such as to images.
     self.baseURL = [NSURL URLWithString:@"http://www.zedsaid.com"];
-    self.shouldShowKeyboard = NO;
+    self.shouldShowKeyboard = YES;
     // Set the HTML contents of the editor
     //    [self setPlaceholder:@"This is a placeholder that will show when there is no content(html)"];
 
